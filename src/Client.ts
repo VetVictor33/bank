@@ -3,7 +3,7 @@ export type ClientData = {
   email: string,
   cpf: string,
   createdAt: Date,
-  address: Address | undefined
+  address: Address[]
 }
 
 type Address = {
@@ -18,19 +18,23 @@ export default class Client {
   private email: string
   private cpf: string
   private createdAt: Date
-  private _address: Address | undefined
+  private _address: Address[] = []
 
   constructor(client: Omit<ClientData, 'createdAt'>) {
     this.name = client.name
     this.email = client.email
     this.cpf = client.cpf
     this.createdAt = new Date()
-    this._address = client?.address
+    if (client?.address) this.addAddress(client.address)
   }
 
 
-  public set address(address: Address) {
-    this._address = address;
+  public addAddress(address: Address[] | Address) {
+    if (Array.isArray(address)) {
+      this._address = this._address.concat(address)
+    } else {
+      this._address.push(address)
+    }
   }
 
 }
